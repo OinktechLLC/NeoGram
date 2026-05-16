@@ -3,7 +3,6 @@ import {
   Bluetooth, 
   Search, 
   Plus, 
-  Menu,
   X,
   Radio,
   MessageSquare,
@@ -16,11 +15,11 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
   
   const menuItems = [
-    { id: 'chats', icon: MessageSquare, label: 'Chats' },
-    { id: 'channels', icon: Radio, label: 'Channels' },
-    { id: 'docs', icon: FileText, label: 'Docs' },
-    { id: 'privacy', icon: Shield, label: 'Privacy Policy' },
-    { id: 'terms', icon: FileText, label: 'Terms of Service' },
+    { id: 'chats', icon: MessageSquare, label: 'Чаты' },
+    { id: 'channels', icon: Radio, label: 'Каналы' },
+    { id: 'docs', icon: FileText, label: 'Документация' },
+    { id: 'privacy', icon: Shield, label: 'Политика конфиденциальности' },
+    { id: 'terms', icon: FileText, label: 'Условия использования' },
     { id: 'faq', icon: HelpCircle, label: 'FAQ' },
   ];
 
@@ -51,7 +50,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
                     NeoGram
                   </h1>
                   <p className="text-xs text-[#8e8e93]">
-                    Bluetooth Messenger
+                    Bluetooth Мессенджер
                   </p>
                 </div>
               </div>
@@ -74,7 +73,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
+                placeholder="Поиск..."
                 className="w-full bg-[#2c2c2e] border border-[#38383a] rounded-full py-2 pl-10 pr-4 text-white placeholder-[#8e8e93] focus:outline-none focus:border-[#007aff] transition-colors text-[15px]"
               />
             </div>
@@ -109,7 +108,7 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
               className="w-full flex items-center justify-center gap-2 bg-[#007aff] hover:bg-[#0066d6] text-white py-2.5 rounded-xl font-medium transition-all"
             >
               <Plus size={20} />
-              New Chat
+              Новый чат
             </button>
             
             <p className="text-center text-xs text-[#8e8e93] mt-3">
