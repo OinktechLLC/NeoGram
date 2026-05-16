@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
+import MobileNav from './components/MobileNav';
 import ChatPage from './pages/ChatPage';
 import ChannelsPage from './pages/ChannelsPage';
 import DocsPage from './pages/DocsPage';
@@ -52,11 +53,14 @@ function App() {
         />
 
         {/* Main Content */}
-        <main className="flex-1 lg:ml-0 min-w-0">
+        <main className="flex-1 lg:ml-0 min-w-0 pb-16 lg:pb-0">
           <div className="h-full">
             {renderContent()}
           </div>
         </main>
+
+        {/* Mobile Bottom Navigation */}
+        <MobileNav activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </BluetoothProvider>
   );

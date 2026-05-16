@@ -1,11 +1,18 @@
 ```
-dist/
+# Dependencies
 node_modules/
+
+# Build artifacts
+dist/
+
+# Environment
 .env
 .env.local
 *.env.*
-.vscode/
-.idea/
+
+# Logs
 *.log
-*.tmp
+
+# Package lock
+package-lock.json
 ```
