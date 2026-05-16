@@ -74,7 +74,10 @@ const ChatPage = () => {
           </div>
 
           <button
-            onClick={scanForDevices}
+            onClick={() => {
+              console.log('Scan button clicked');
+              scanForDevices();
+            }}
             disabled={isScanning}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl transition-all text-[14px] font-medium ${
               isScanning 

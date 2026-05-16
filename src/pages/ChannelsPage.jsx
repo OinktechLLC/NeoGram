@@ -43,14 +43,7 @@ const ChannelsPage = () => {
       setLoading(true);
       setError(null);
       
-      // Проверяем наличие токена
-      const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN;
-      if (!token) {
-        setError('Для работы каналов необходим Telegram Bot Token. Добавьте VITE_TELEGRAM_BOT_TOKEN в .env файл');
-        setLoading(false);
-        return;
-      }
-
+      // Токен больше не требуется - используем моковые данные
       const data = await telegramService.getChannels();
       setChannels(data);
     } catch (error) {
@@ -102,9 +95,6 @@ const ChannelsPage = () => {
           <div className="flex flex-col items-center justify-center py-8 px-4">
             <div className="bg-[#ff3b30]/10 rounded-2xl p-6 text-center max-w-md">
               <p className="text-[#ff3b30] text-[15px] mb-2">{error}</p>
-              <p className="text-[#8e8e93] text-[13px]">
-                Для подключения к Telegram API создайте бота через @BotFather и добавьте токен в .env файл
-              </p>
               <button
                 onClick={loadChannels}
                 className="mt-4 px-6 py-2 bg-[#007aff] hover:bg-[#0066d6] text-white rounded-xl transition-colors"

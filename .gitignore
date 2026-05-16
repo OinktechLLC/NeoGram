@@ -1,17 +1,11 @@
 ```
-# Dependencies
-node_modules/
-
-# Build artifacts
 dist/
-
-# Environment variables
+node_modules/
+.env
 .env.local
-.env.*
-
-# IDE
+*.env.*
 .vscode/
-
-# Original rules preserved
+.idea/
 *.log
+*.tmp
 ```
