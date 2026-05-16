@@ -3,9 +3,18 @@
 
 import { TelegramClient } from 'telegram';
 import { StringSession } from 'telegram/sessions';
-import input from 'input';
 import { Api } from 'telegram/tl';
 import bigInt from 'big-integer';
+
+// Browser-compatible input helper
+const browserInput = {
+  text: async (prompt) => {
+    return new Promise((resolve) => {
+      const value = window.prompt(prompt);
+      resolve(value || '');
+    });
+  }
+};
 
 class TelegramService {
   constructor() {
@@ -32,9 +41,9 @@ class TelegramService {
     });
 
     await this.client.start({
-      phoneNumber: async () => await input.text("Please enter your number: "),
-      password: async () => await input.text("Please enter your password: "),
-      phoneCode: async () => await input.text("Please enter the code you received: "),
+      phoneNumber: async () => await browserInput.text("Please enter your number: "),
+      password: async () => await browserInput.text("Please enter your password: "),
+      phoneCode: async () => await browserInput.text("Please enter the code you received: "),
       onError: (err) => console.log(err),
     });
 
