@@ -17,11 +17,11 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
-      external: ['telegram', 'telegram/sessions', 'big-integer']
+      external: ['telegram', 'telegram/sessions', 'telegram/tl', 'big-integer']
     }
   },
   optimizeDeps: {
-    exclude: ['telegram', 'telegram/sessions', 'big-integer']
+    exclude: ['telegram', 'telegram/sessions', 'telegram/tl', 'big-integer']
   },
   resolve: {
     alias: {
