@@ -34,13 +34,13 @@ function App() {
 
   return (
     <BluetoothProvider>
-      <div className="flex h-screen gradient-bg">
+      <div className="flex h-screen bg-[#1c1c1d]">
         {/* Mobile Menu Button */}
         <button
           onClick={() => setSidebarOpen(true)}
-          className="lg:hidden fixed top-4 left-4 z-50 p-3 glass-effect rounded-xl"
+          className="lg:hidden fixed top-3 left-3 z-50 p-2.5 bg-[#2c2c2e] rounded-full shadow-lg"
         >
-          <Menu size={24} className="text-neogram-text" />
+          <Menu size={22} className="text-white" />
         </button>
 
         {/* Sidebar */}

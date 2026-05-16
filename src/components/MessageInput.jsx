@@ -3,7 +3,7 @@ import { Send, Smile, Paperclip, Mic } from 'lucide-react';
 
 const MessageInput = ({ onSendMessage, disabled = false }) => {
   const [message, setMessage] = useState('');
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     if (message.trim() && !disabled) {
@@ -20,10 +20,10 @@ const MessageInput = ({ onSendMessage, disabled = false }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="glass-effect rounded-2xl p-3 flex items-center gap-2">
+    <form onSubmit={handleSubmit} className="telegram-input flex items-center gap-2">
       <button
         type="button"
-        className="p-2 hover:bg-neogram-secondary rounded-full transition-colors text-neogram-muted"
+        className="p-2 hover:bg-white/5 rounded-full transition-colors text-[#8e8e93]"
         disabled={disabled}
       >
         <Paperclip size={20} />
@@ -35,13 +35,13 @@ const MessageInput = ({ onSendMessage, disabled = false }) => {
         onChange={(e) => setMessage(e.target.value)}
         onKeyPress={handleKeyPress}
         placeholder="Message..."
-        className="flex-1 bg-transparent border-none outline-none text-neogram-text placeholder-neogram-muted px-3 py-2"
+        className="flex-1 bg-transparent border-none outline-none text-white placeholder-[#8e8e93] px-2 py-1 text-[16px]"
         disabled={disabled}
       />
 
       <button
         type="button"
-        className="p-2 hover:bg-neogram-secondary rounded-full transition-colors text-neogram-muted"
+        className="p-2 hover:bg-white/5 rounded-full transition-colors text-[#8e8e93]"
         disabled={disabled}
       >
         <Smile size={20} />
@@ -50,7 +50,7 @@ const MessageInput = ({ onSendMessage, disabled = false }) => {
       {message.trim() ? (
         <button
           type="submit"
-          className="p-3 bg-neogram-primary hover:bg-blue-600 rounded-full transition-all transform hover:scale-105"
+          className="p-3 bg-[#007aff] hover:bg-[#0066d6] rounded-full transition-all"
           disabled={disabled}
         >
           <Send size={20} className="text-white" />
@@ -58,10 +58,10 @@ const MessageInput = ({ onSendMessage, disabled = false }) => {
       ) : (
         <button
           type="button"
-          className="p-3 bg-neogram-secondary hover:bg-neogram-border rounded-full transition-colors"
+          className="p-3 bg-[#2c2c2e] hover:bg-[#3a3a3c] rounded-full transition-colors"
           disabled={disabled}
         >
-          <Mic size={20} className="text-neogram-muted" />
+          <Mic size={20} className="text-[#8e8e93]" />
         </button>
       )}
     </form>

@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { 
   Bluetooth, 
   Search, 
   Plus, 
-  Settings, 
   Menu,
   X,
   Radio,
@@ -16,7 +14,7 @@ import {
 
 const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
   const [searchQuery, setSearchQuery] = useState('');
-
+  
   const menuItems = [
     { id: 'chats', icon: MessageSquare, label: 'Chats' },
     { id: 'channels', icon: Radio, label: 'Channels' },
@@ -31,43 +29,38 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
       {/* Mobile Overlay */}
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar */}
-      <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: isOpen ? 0 : -300 }}
-        className={`fixed lg:relative left-0 top-0 h-full w-80 glass-effect border-r border-neogram-border z-50 lg:translate-x-0 lg:z-auto`}
+      <aside
+        className={`fixed lg:relative left-0 top-0 h-full w-[280px] bg-[#1c1c1d] border-r border-[#38383a] z-50 lg:translate-x-0 lg:z-auto transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
       >
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b border-neogram-border">
-            <div className="flex items-center justify-between mb-4">
-              <motion.div 
-                className="flex items-center gap-3"
-                whileHover={{ scale: 1.05 }}
-              >
-                <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-3 rounded-xl">
-                  <Bluetooth size={28} className="text-white bluetooth-icon" />
+          <div className="p-4 border-b border-[#38383a]">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-3">
+                <div className="bg-[#007aff] p-2.5 rounded-full">
+                  <Bluetooth size={24} className="text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-neogram-text">
+                  <h1 className="text-xl font-semibold text-white">
                     NeoGram
                   </h1>
-                  <p className="text-xs text-neogram-muted">
-                    Bluetooth Messenger 2026
+                  <p className="text-xs text-[#8e8e93]">
+                    Bluetooth Messenger
                   </p>
                 </div>
-              </motion.div>
+              </div>
               
               <button
                 onClick={onClose}
-                className="lg:hidden p-2 hover:bg-neogram-secondary rounded-full transition-colors"
+                className="lg:hidden p-2 hover:bg-white/5 rounded-full transition-colors"
               >
-                <X size={20} className="text-neogram-muted" />
+                <X size={20} className="text-[#8e8e93]" />
               </button>
             </div>
 
@@ -75,61 +68,56 @@ const Sidebar = ({ activeTab, setActiveTab, isOpen, onClose }) => {
             <div className="relative">
               <Search 
                 size={18} 
-                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neogram-muted" 
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#8e8e93]" 
               />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-full bg-neogram-secondary border border-neogram-border rounded-xl py-2.5 pl-10 pr-4 text-neogram-text placeholder-neogram-muted focus:outline-none focus:border-neogram-primary transition-colors"
+                className="w-full bg-[#2c2c2e] border border-[#38383a] rounded-full py-2 pl-10 pr-4 text-white placeholder-[#8e8e93] focus:outline-none focus:border-[#007aff] transition-colors text-[15px]"
               />
             </div>
           </div>
 
           {/* Navigation */}
-          <nav className="flex-1 overflow-y-auto p-4">
-            <div className="space-y-1">
-              {menuItems.map((item, index) => (
-                <motion.button
+          <nav className="flex-1 overflow-y-auto p-2">
+            <div className="space-y-0.5">
+              {menuItems.map((item) => (
+                <button
                   key={item.id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   onClick={() => {
                     setActiveTab(item.id);
                     onClose();
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${
                     activeTab === item.id
-                      ? 'bg-neogram-primary text-white shadow-lg shadow-blue-500/30'
-                      : 'text-neogram-muted hover:bg-neogram-secondary hover:text-neogram-text'
+                      ? 'bg-[#007aff] text-white'
+                      : 'text-white hover:bg-[#2c2c2e]'
                   }`}
                 >
-                  <item.icon size={20} />
-                  <span className="font-medium">{item.label}</span>
-                </motion.button>
+                  <item.icon size={22} />
+                  <span className="font-medium text-[15px]">{item.label}</span>
+                </button>
               ))}
             </div>
           </nav>
 
           {/* Footer */}
-          <div className="p-4 border-t border-neogram-border">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 rounded-xl font-medium transition-all shadow-lg shadow-blue-500/30"
+          <div className="p-3 border-t border-[#38383a]">
+            <button
+              className="w-full flex items-center justify-center gap-2 bg-[#007aff] hover:bg-[#0066d6] text-white py-2.5 rounded-xl font-medium transition-all"
             >
               <Plus size={20} />
               New Chat
-            </motion.button>
+            </button>
             
-            <p className="text-center text-xs text-neogram-muted mt-3">
-              v2.0.26 • Production Ready
+            <p className="text-center text-xs text-[#8e8e93] mt-3">
+              v2.0.26
             </p>
           </div>
         </div>
-      </motion.aside>
+      </aside>
     </>
   );
 };
