@@ -1,235 +1,165 @@
-// Telegram API Service - Реальная интеграция через MTProto (GramJS)
-// Использует официальный Telegram API для подключения без бота
-// Поддержка: сообщения, файлы, голосовые, каналы
-
-import { TelegramClient } from 'telegram';
-import { StringSession } from 'telegram/sessions';
-import bigInt from 'big-integer';
-
-const API_ID = 21724; // Официальный API ID Telegram Desktop
-const API_HASH = '3e0cb5efcd52300aec5994fdfdd56dc1'; // Официальный API Hash
+// Telegram API Service - Заглушка для браузерной версии
+// Реальная интеграция через MTProto требует Node.js окружения
+// Для продакшена используйте бэкенд-прокси для Telegram API
 
 class TelegramService {
   constructor() {
-    this.client = null;
-    this.session = new StringSession('');
     this.isConnected = false;
     this.currentUser = null;
+    this.mockChannels = [
+      {
+        id: '1',
+        title: 'Telegram News',
+        username: 'telegram',
+        photo: 'https://ui-avatars.com/api/?name=Telegram+News&background=0088cc&color=fff&size=128',
+        type: 'channel',
+        subscribers: 2500000,
+        description: 'Official Telegram news channel',
+        unreadCount: 5
+      },
+      {
+        id: '2',
+        title: 'Tech Updates',
+        username: 'techupdates',
+        photo: 'https://ui-avatars.com/api/?name=Tech+Updates&background=3b82f6&color=fff&size=128',
+        type: 'channel',
+        subscribers: 150000,
+        description: 'Latest technology news and updates',
+        unreadCount: 12
+      },
+      {
+        id: '3',
+        title: 'Design Inspiration',
+        username: 'designinspo',
+        photo: 'https://ui-avatars.com/api/?name=Design+Inspiration&background=8b5cf6&color=fff&size=128',
+        type: 'channel',
+        subscribers: 89000,
+        description: 'Daily design inspiration and resources',
+        unreadCount: 3
+      }
+    ];
+    this.mockPosts = {
+      '1': [
+        {
+          id: '101',
+          channelId: '1',
+          text: 'Welcome to Telegram News! Stay tuned for updates.',
+          date: new Date().toISOString(),
+          views: 125000,
+          forwards: 5200,
+          author: 'Admin',
+          stickers: [],
+          media: null
+        },
+        {
+          id: '102',
+          channelId: '1',
+          text: 'New features coming soon! 🚀',
+          date: new Date(Date.now() - 3600000).toISOString(),
+          views: 98000,
+          forwards: 3100,
+          author: 'Admin',
+          stickers: [],
+          media: null
+        }
+      ],
+      '2': [
+        {
+          id: '201',
+          channelId: '2',
+          text: 'AI breakthrough: New model achieves human-level performance!',
+          date: new Date().toISOString(),
+          views: 45000,
+          forwards: 1200,
+          author: 'Editor',
+          stickers: [],
+          media: null
+        }
+      ],
+      '3': [
+        {
+          id: '301',
+          channelId: '3',
+          text: 'Beautiful UI design trends for 2026 ✨',
+          date: new Date().toISOString(),
+          views: 23000,
+          forwards: 890,
+          author: 'Designer',
+          stickers: [],
+          media: null
+        }
+      ]
+    };
   }
 
-  // Инициализация клиента
+  // Инициализация клиента (заглушка)
   async initialize() {
-    if (!this.client) {
-      this.client = new TelegramClient(this.session, API_ID, API_HASH, {
-        connectionRetries: 5,
-        useWSS: true,
-      });
-      await this.client.start({
-        phoneNumber: async () => await this.promptPhoneNumber(),
-        phoneCode: async () => await this.promptPhoneCode(),
-        password: async () => await this.promptPassword(),
-      });
-      this.currentUser = await this.client.getMe();
-      this.isConnected = true;
-    }
-    return this.client;
+    console.log('TelegramService: Using mock mode (browser-compatible)');
+    this.isConnected = true;
+    return this;
   }
 
-  // Запрос номера телефона
+  // Запрос номера телефона (заглушка)
   async promptPhoneNumber() {
-    return new Promise((resolve) => {
-      const event = new CustomEvent('telegram-phone-request', {
-        detail: { callback: resolve }
-      });
-      window.dispatchEvent(event);
-    });
+    throw new Error('Phone authentication not available in mock mode');
   }
 
-  // Запрос кода подтверждения
+  // Запрос кода подтверждения (заглушка)
   async promptPhoneCode() {
-    return new Promise((resolve) => {
-      const event = new CustomEvent('telegram-code-request', {
-        detail: { callback: resolve }
-      });
-      window.dispatchEvent(event);
-    });
+    throw new Error('Code authentication not available in mock mode');
   }
 
-  // Запрос пароля (если включена 2FA)
+  // Запрос пароля (заглушка)
   async promptPassword() {
-    return new Promise((resolve) => {
-      const event = new CustomEvent('telegram-password-request', {
-        detail: { callback: resolve }
-      });
-      window.dispatchEvent(event);
-    });
+    throw new Error('Password authentication not available in mock mode');
   }
 
-  // Получение списка каналов/чатов
+  // Получение списка каналов/чатов (моковые данные)
   async getChannels() {
     try {
       await this.initialize();
-      const dialogs = await this.client.getDialogs();
-      const channels = [];
-      
-      for (const dialog of dialogs) {
-        if (dialog.isChannel || dialog.isGroup || dialog.isUser) {
-          const entity = dialog.entity;
-          const photo = await this.getEntityPhoto(entity);
-          
-          channels.push({
-            id: entity.id.toString(),
-            title: entity.title || entity.firstName || 'Unknown',
-            username: entity.username || null,
-            photo: photo,
-            type: entity.className === 'Channel' ? 'channel' : 
-                   entity.className === 'Chat' ? 'group' : 'user',
-            subscribers: entity.participantsCount || 0,
-            description: entity.about || '',
-            unreadCount: dialog.unreadCount || 0
-          });
-        }
-      }
-      
-      return channels;
+      return this.mockChannels;
     } catch (error) {
       console.error('Ошибка загрузки каналов:', error);
       throw error;
     }
   }
 
-  // Получение фото профиля
+  // Получение фото профиля (заглушка)
   async getEntityPhoto(entity) {
-    try {
-      if (entity.photo) {
-        const photo = await this.client.downloadProfilePhoto(entity, { isBig: false });
-        return photo ? URL.createObjectURL(new Blob([photo])) : null;
-      }
-      return null;
-    } catch (error) {
-      return `https://ui-avatars.com/api/?name=${encodeURIComponent(entity.title || entity.firstName || 'U')}&background=3b82f6&color=fff&size=128`;
-    }
+    return entity.photo || `https://ui-avatars.com/api/?name=${encodeURIComponent(entity.title || 'U')}&background=3b82f6&color=fff&size=128`;
   }
 
-  // Получение постов канала
+  // Получение постов канала (моковые данные)
   async getChannelPosts(channelId, limit = 50) {
     try {
       await this.initialize();
-      const entity = await this.client.getEntity(parseInt(channelId));
-      const messages = await this.client.getMessages(entity, { limit });
-      
-      const posts = [];
-      for (const msg of messages) {
-        const post = {
-          id: msg.id.toString(),
-          channelId: channelId,
-          text: msg.message || '',
-          date: msg.date.toISOString(),
-          views: msg.views || 0,
-          forwards: msg.forwards || 0,
-          author: msg.postAuthor || 'Admin',
-          stickers: [],
-          media: null
-        };
-
-        // Обработка медиа
-        if (msg.media) {
-          post.media = await this.processMedia(msg.media);
-        }
-
-        // Обработка стикеров
-        if (msg.sticker) {
-          const stickerData = await this.processSticker(msg.sticker);
-          post.stickers.push(stickerData);
-        }
-
-        posts.push(post);
-      }
-
-      return posts;
+      const posts = this.mockPosts[channelId] || [];
+      return posts.slice(0, limit);
     } catch (error) {
       console.error('Ошибка загрузки постов:', error);
       throw error;
     }
   }
 
-  // Обработка медиа контента
+  // Обработка медиа контента (заглушка)
   async processMedia(media) {
-    try {
-      if (media.className === 'MessageMediaPhoto') {
-        const file = await this.client.downloadMedia(media);
-        return {
-          type: 'photo',
-          url: file ? URL.createObjectURL(new Blob([file])) : null,
-          fileId: media.photo?.id?.toString()
-        };
-      }
-      
-      if (media.className === 'MessageMediaDocument') {
-        const doc = media.document;
-        if (doc.mimeType?.startsWith('video/')) {
-          const file = await this.client.downloadMedia(media);
-          return {
-            type: 'video',
-            url: file ? URL.createObjectURL(new Blob([file])) : null,
-            fileId: doc.id?.toString(),
-            thumbnail: media.thumb ? await this.client.downloadMedia(media.thumb) : null
-          };
-        }
-        
-        if (doc.mimeType?.startsWith('audio/')) {
-          const file = await this.client.downloadMedia(media);
-          return {
-            type: doc.mimeType.includes('ogg') || doc.mimeType.includes('voice') ? 'voice' : 'audio',
-            url: file ? URL.createObjectURL(new Blob([file])) : null,
-            fileId: doc.id?.toString(),
-            duration: doc.attributes?.find(a => a.className === 'DocumentAttributeAudio')?.duration || 0
-          };
-        }
-        
-        // Файл
-        const file = await this.client.downloadMedia(media);
-        return {
-          type: 'file',
-          url: file ? URL.createObjectURL(new Blob([file])) : null,
-          fileId: doc.id?.toString(),
-          fileName: doc.attributes?.find(a => a.className === 'DocumentAttributeFilename')?.fileName || 'file',
-          fileSize: doc.size
-        };
-      }
-      
-      return null;
-    } catch (error) {
-      console.error('Ошибка обработки медиа:', error);
-      return null;
-    }
+    return null;
   }
 
-  // Обработка стикера
+  // Обработка стикера (заглушка)
   async processSticker(sticker) {
-    try {
-      const file = await this.client.downloadMedia(sticker);
-      return {
-        id: sticker.id?.toString(),
-        emoji: sticker.alt || '',
-        isAnimated: sticker.mimeType?.includes('webm') || sticker.mimeType?.includes('tgs'),
-        url: file ? URL.createObjectURL(new Blob([file])) : null
-      };
-    } catch (error) {
-      return { id: sticker.id?.toString(), emoji: '🔵', isAnimated: false, url: null };
-    }
+    return { id: '1', emoji: '🔵', isAnimated: false, url: null };
   }
 
-  // Отправка текстового сообщения
+  // Отправка текстового сообщения (заглушка)
   async sendMessage(chatId, text) {
     try {
       await this.initialize();
-      const entity = await this.client.getEntity(parseInt(chatId));
-      const message = await this.client.sendMessage(entity, { message: text });
       return {
-        id: message.id.toString(),
-        text: message.message,
-        timestamp: message.date.toISOString()
+        id: Date.now().toString(),
+        text: text,
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       console.error('Ошибка отправки сообщения:', error);
@@ -237,19 +167,13 @@ class TelegramService {
     }
   }
 
-  // Отправка файла
+  // Отправка файла (заглушка)
   async sendFile(chatId, file, caption = '') {
     try {
       await this.initialize();
-      const entity = await this.client.getEntity(parseInt(chatId));
-      const message = await this.client.sendFile(entity, {
-        file: file,
-        caption: caption,
-        forceDocument: false
-      });
       return {
-        id: message.id.toString(),
-        timestamp: message.date.toISOString()
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       console.error('Ошибка отправки файла:', error);
@@ -257,28 +181,13 @@ class TelegramService {
     }
   }
 
-  // Отправка голосового сообщения
+  // Отправка голосового сообщения (заглушка)
   async sendVoice(chatId, audioBlob, duration = 0) {
     try {
       await this.initialize();
-      const entity = await this.client.getEntity(parseInt(chatId));
-      
-      // Конвертация в формат Ogg Opus (требуется на клиенте)
-      const message = await this.client.sendFile(entity, {
-        file: audioBlob,
-        voiceNote: true,
-        attributes: [
-          {
-            className: 'DocumentAttributeAudio',
-            duration: duration,
-            voice: true
-          }
-        ]
-      });
-      
       return {
-        id: message.id.toString(),
-        timestamp: message.date.toISOString()
+        id: Date.now().toString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       console.error('Ошибка отправки голосового:', error);
@@ -286,20 +195,9 @@ class TelegramService {
     }
   }
 
-  // Прослушивание новых сообщений (Real-time)
+  // Прослушивание новых сообщений (заглушка)
   async listenForMessages(callback) {
-    try {
-      await this.initialize();
-      
-      this.client.addEventHandler((update) => {
-        if (update.className === 'UpdateNewMessage') {
-          callback(update.message);
-        }
-      }, { updates: ['newMessage'] });
-      
-    } catch (error) {
-      console.error('Ошибка подписки на сообщения:', error);
-    }
+    console.log('Message listener registered (mock mode)');
   }
 
   // Проверка статуса подключения
@@ -312,11 +210,8 @@ class TelegramService {
 
   // Выход
   async disconnect() {
-    if (this.client) {
-      await this.client.disconnect();
-      this.isConnected = false;
-      this.currentUser = null;
-    }
+    this.isConnected = false;
+    this.currentUser = null;
   }
 }
 
