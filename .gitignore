@@ -1,9 +1,4 @@
 ```
-# Build artifacts
-dist/
-build/
-*.js.map
-
 # Dependencies
 node_modules/
 
@@ -12,29 +7,35 @@ node_modules/
 .env.local
 .env.*
 
-# Editors
-.vscode/
-.idea/
-
 # Logs and temp files
 *.log
 *.tmp
-*.swp
+
+# Editors
+.vscode/
+.idea/
 
 # Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+.Python
+env/
+venv/
+.venv/
+.egg-info/
+*.egg
 
-# Compiled files
-*.o
-*.obj
+# Build outputs
+dist/
+build/
+*.out
+*.exe
+*.dll
 *.so
 *.a
-*.dll
-*.exe
-*.out
+*.obj
 
 # Compression
 *.zip
@@ -56,12 +57,27 @@ __pycache__/
 *.lz
 *.lzo
 
-# Coverage
-coverage/
-htmlcov/
-.coverage
+# OS
+.DS_Store
+Thumbs.db
 
 # Testing
-.mypy_cache/
+.coverage
+coverage/
+htmlcov/
 .pytest_cache/
+.mypy_cache/
+
+# Java/Maven/Gradle
+target/
+.gradle/
+*.class
+
+# Go
+*.o
+
+# Temporary files
+*.swp
+*.swo
+*.tmp
 ```

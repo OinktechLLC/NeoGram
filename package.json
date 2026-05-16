@@ -22,6 +22,7 @@
     "@telegram-apps/sdk": "^3.11.8",
     "big-integer": "^1.6.52",
     "framer-motion": "^12.38.0",
+    "input": "^1.0.1",
     "lucide-react": "^1.16.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
