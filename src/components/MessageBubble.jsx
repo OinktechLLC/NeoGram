@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { CheckCheck } from 'lucide-react';
 
 const MessageBubble = ({ message, isOwn }) => {
   const formatTime = (date) => {
@@ -8,21 +8,18 @@ const MessageBubble = ({ message, isOwn }) => {
       minute: '2-digit' 
     });
   };
-
+  
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.9 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-3`}
+    <div
+      className={`flex ${isOwn ? 'justify-end' : 'justify-start'} mb-1 message-animate`}
     >
       <div
         className={`message-bubble ${
           isOwn ? 'message-sent' : 'message-received'
-        } shadow-lg`}
+        }`}
       >
         {message.stickers && message.stickers.length > 0 && (
-          <div className="text-3xl mb-2">
+          <div className="text-3xl mb-1">
             {message.stickers.map((sticker, index) => (
               <span key={index} className="inline-block mr-1">
                 {sticker}
@@ -32,38 +29,38 @@ const MessageBubble = ({ message, isOwn }) => {
         )}
 
         {message.text && (
-          <p className="text-neogram-text whitespace-pre-wrap break-words">
+          <p className="text-[15px] leading-snug">
             {message.text}
           </p>
         )}
 
         {message.media && (
-          <div className="mt-2 rounded-lg overflow-hidden">
+          <div className="mt-2 rounded-xl overflow-hidden">
             {message.media.type === 'photo' && (
               <img
                 src={message.media.url}
                 alt="Media"
-                className="max-w-full h-auto rounded-lg"
+                className="max-w-full h-auto rounded-xl"
               />
             )}
             {message.media.type === 'video' && (
               <video
                 src={message.media.url}
                 controls
-                className="max-w-full rounded-lg"
+                className="max-w-full rounded-xl"
               />
             )}
           </div>
         )}
 
-        <div className="flex items-center justify-end gap-1 mt-1 text-xs text-neogram-muted/70">
-          <span>{formatTime(message.timestamp || Date.now())}</span>
+        <div className="flex items-center justify-end gap-1 mt-1">
+          <span className="message-time">{formatTime(message.timestamp || Date.now())}</span>
           {isOwn && (
-            <span className="text-blue-400">✓✓</span>
+            <CheckCheck size={14} className="text-white/70" />
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
