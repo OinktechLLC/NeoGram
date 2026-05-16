@@ -20,16 +20,48 @@ export const BluetoothProvider = ({ children }) => {
 
   useEffect(() => {
     // Check if Web Bluetooth API is supported
-    if (navigator.bluetooth) {
-      setIsSupported(true);
-    } else {
-      setError('Web Bluetooth API not supported in this browser');
-    }
+    const checkBluetoothSupport = () => {
+      // Check for Web Bluetooth API support
+      if (navigator.bluetooth) {
+        setIsSupported(true);
+        return;
+      }
+      
+      // Check if running in insecure context (HTTP instead of HTTPS)
+      if (window.isSecureContext === false) {
+        setError('Web Bluetooth API requires HTTPS. Please use HTTPS or localhost.');
+        return;
+      }
+      
+      // Check for mobile-specific issues
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      
+      if (isMobile) {
+        // Check if it's Yandex Browser on mobile
+        const isYandex = /yandex|yabrowser/i.test(userAgent);
+        if (isYandex) {
+          setError('Yandex Browser на мобильных устройствах может не поддерживать Web Bluetooth API. Попробуйте Chrome для Android.');
+          return;
+        }
+        
+        // Check if it's iOS (limited Bluetooth support)
+        const isIOS = /iphone|ipad|ipod/i.test(userAgent);
+        if (isIOS) {
+          setError('iOS Safari имеет ограниченную поддержку Web Bluetooth API. Попробуйте Chrome на Android.');
+          return;
+        }
+      }
+      
+      setError('Web Bluetooth API not supported in this browser. Try Chrome on Android or Desktop.');
+    };
+    
+    checkBluetoothSupport();
   }, []);
 
   const scanForDevices = async () => {
     if (!isSupported) {
-      setError('Bluetooth not supported');
+      setError('Bluetooth not supported in this browser');
       return;
     }
 
@@ -37,10 +69,18 @@ export const BluetoothProvider = ({ children }) => {
     setError(null);
 
     try {
-      // Request Bluetooth device with generic access service
+      // Request Bluetooth device - this MUST be called from a user gesture (click)
+      // Web Bluetooth API requires user interaction for security reasons
+      
+      // Accept all devices (more permissive filter)
       const device = await navigator.bluetooth.requestDevice({
-        filters: [{ services: ['generic_access'] }],
-        optionalServices: ['generic_attribute']
+        acceptAllDevices: true,
+        optionalServices: [
+          'battery_service',
+          'device_information',
+          'generic_access',
+          'generic_attribute'
+        ]
       });
 
       setDevices(prev => {
@@ -57,8 +97,16 @@ export const BluetoothProvider = ({ children }) => {
 
       setIsScanning(false);
     } catch (err) {
-      if (err.name !== 'NotFoundError') {
-        setError(err.message);
+      console.error('Bluetooth scan error:', err);
+      
+      if (err.name === 'NotFoundError') {
+        setError('No device selected or operation cancelled');
+      } else if (err.name === 'SecurityError') {
+        setError('Security error: Make sure you\'re using HTTPS');
+      } else if (err.name === 'NotSupportedError') {
+        setError('Bluetooth not supported in this browser');
+      } else {
+        setError(err.message || 'Failed to scan for devices');
       }
       setIsScanning(false);
     }
