@@ -1,1 +1,23 @@
-(src/services/telegramService.js)
+```
+# Build artifacts
+dist/
+build/
+*.map
+
+# Dependencies
+node_modules/
+.vite/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
+```

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, ChevronLeft } from 'lucide-react';
-import TelegramService from '../services/telegramService';
 import ChannelPost from '../components/ChannelPost';
 import { motion } from 'framer-motion';
 
-const telegramService = new TelegramService();
+// Динамический импорт TelegramService для избежания ошибок в браузере
+let TelegramService = null;
+let telegramService = null;
 
 const ChannelsPage = () => {
   const [channels, setChannels] = useState([]);
@@ -12,18 +13,45 @@ const ChannelsPage = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [serviceAvailable, setServiceAvailable] = useState(false);
 
+  // Инициализация сервиса при монтировании компонента
   useEffect(() => {
-    loadChannels();
+    const initService = async () => {
+      try {
+        const module = await import('../services/telegramService');
+        TelegramService = module.default;
+        telegramService = new TelegramService();
+        setServiceAvailable(true);
+      } catch (err) {
+        console.error('TelegramService недоступен:', err);
+        setServiceAvailable(false);
+        setError('Сервис Telegram временно недоступен');
+        setLoading(false);
+      }
+    };
+    initService();
   }, []);
 
   useEffect(() => {
-    if (selectedChannel) {
+    if (serviceAvailable) {
+      loadChannels();
+    }
+  }, [serviceAvailable]);
+
+  useEffect(() => {
+    if (selectedChannel && serviceAvailable) {
       loadChannelPosts(selectedChannel.id);
     }
-  }, [selectedChannel]);
+  }, [selectedChannel, serviceAvailable]);
 
   const loadChannels = async () => {
+    if (!serviceAvailable || !telegramService) {
+      setError('Сервис не доступен');
+      setLoading(false);
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -41,6 +69,11 @@ const ChannelsPage = () => {
   };
 
   const loadChannelPosts = async (channelId) => {
+    if (!serviceAvailable || !telegramService) {
+      setError('Сервис не доступен');
+      return;
+    }
+
     try {
       const channelPosts = await telegramService.getChannelPosts(channelId);
       setPosts(channelPosts);
